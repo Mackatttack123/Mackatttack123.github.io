@@ -111,6 +111,7 @@ function preload(){
 
     // load sounds
     for(var k = 1; k < 6; k++){
+        print("loading 7." + k);
         background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
         print("loaded 7." + k);
     }
