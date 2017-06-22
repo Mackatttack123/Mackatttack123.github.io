@@ -93,6 +93,12 @@ function preload(){
     turret_sheet = loadImage('images/turrets.png');
     buildings3_sheet = loadImage('images/buildings3.png');
 
+    icon_clicked_sound  = loadSound('audio/icon_clicked.mp3');
+    item_pickup_sound = loadSound('audio/money_bag.wav');
+    item_dropped_sound = loadSound('audio/cardboard_box.wav');
+    intro_track = loadSound('audio/medieval_introduction.wav');
+    select_mode_sound = loadSound('audio/select_mode.wav');
+
     // for mini game
     stone_background = loadImage('images/stone.jpeg');
     turtle_sheet = loadImage('images/turtles.png');
@@ -136,11 +142,6 @@ function setup() {
         background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
     }
     current_track = background_audio[Math.floor(random(0, 5))];
-    icon_clicked_sound  = loadSound('audio/icon_clicked.mp3');
-    item_pickup_sound = loadSound('audio/money_bag.wav');
-    item_dropped_sound = loadSound('audio/cardboard_box.wav');
-    intro_track = loadSound('audio/medieval_introduction.wav');
-    select_mode_sound = loadSound('audio/select_mode.wav');
 }
 
 var player_drawn = false;
@@ -152,7 +153,7 @@ var exploration_mode = true;
 var choosing_mode = true;
 var button_clicked_lag = 0;
 
-var music_sound = true;
+var music_sound = false;
 var sound_sound = true;
 
 function draw(){
