@@ -94,10 +94,10 @@ function preload(){
     buildings3_sheet = loadImage('images/buildings3.png');
 
     // load sounds
-    /*for(var k = 1; k < 6; k++){
+    for(var k = 1; k < 6; k++){
         background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
     }
-    current_track = background_audio[Math.floor(random(0, 5))];*/
+    current_track = background_audio[Math.floor(random(0, 5))];
     icon_clicked_sound  = loadSound('audio/icon_clicked.mp3');
     item_pickup_sound = loadSound('audio/money_bag.wav');
     item_dropped_sound = loadSound('audio/cardboard_box.wav');
@@ -240,7 +240,7 @@ function mode_choosing_screen(){
     text("Exploration Mode", width/2 - 101, height/2 + 23);
     text("Creative Mode", width/2 - 85, height/2 + 146);
     textSize(15);
-    text("            (Beta v1.07)", width/2 - 95, height/2 + 41);
+    text("            (Beta v1.09)", width/2 - 95, height/2 + 41);
     text("         (Coming Soon)", width/2 - 85, height/2 + 166);
     fill(255);
     textSize(80);
