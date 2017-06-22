@@ -118,6 +118,7 @@ function preload(){
 }
 
 function setup() {
+    print("setting up...");
     canvas = createCanvas(800, 600);
     x = -1950;
     y = -2650;
