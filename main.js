@@ -152,7 +152,7 @@ var exploration_mode = true;
 var choosing_mode = true;
 var button_clicked_lag = 0;
 
-var music_sound = false;
+var music_sound = true;
 var sound_sound = true;
 
 function draw(){
