@@ -108,6 +108,12 @@ function preload(){
     stone_background = loadImage('images/stone.jpeg');
     turtle_sheet = loadImage('images/turtles.png');
     print("loaded 6");
+
+    // load sounds
+    for(var k = 1; k < 6; k++){
+        background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
+    }
+    print("loaded 7");
 }
 
 function setup() {
@@ -143,12 +149,8 @@ function setup() {
         }
     }*/
 
-    // load sounds
-    for(var k = 1; k < 6; k++){
-        background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
-    }
     current_track = background_audio[Math.floor(random(0, 5))];
-    print("loaded 7");
+    print("all set up");
 }
 
 var player_drawn = false;
