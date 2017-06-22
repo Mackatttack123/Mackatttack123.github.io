@@ -151,7 +151,7 @@ function setup() {
         }
     }*/
 
-    current_track = background_audio[Math.floor(random(0, 5))];
+    //current_track = background_audio[Math.floor(random(0, 5))];
     print("all set up");
 }
 
