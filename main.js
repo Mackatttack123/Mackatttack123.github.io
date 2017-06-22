@@ -64,6 +64,7 @@ function preload(){
     loading_gif.style("height", "100px");
     loading_gif.style("width", "100px");
     loading_gif.position(windowWidth/2 - 55, windowHeight/2 - 70);
+    print("loaded 1");
 
     //load sprite sheets and other images
     trees_sheet = loadImage('images/trees.png')
@@ -71,6 +72,7 @@ function preload(){
     for (var k = 0; k < 8; k++) {
         people_sheets[k] = loadImage('images/people' + (k + 1)+ '.png');
     }
+    print("loaded 2");
 
     shadow1 = loadImage('images/circle_shadow1.png');
     shadow2 = loadImage('images/circle_shadow2.png');
@@ -78,6 +80,7 @@ function preload(){
     red_button_up = loadImage('images/red_button_unclicked.png');
     red_button_down = loadImage('images/red_button_clicked.png');
     title_screen_background = loadImage('images/title_screen_background.png');
+    print("loaded 3");
 
     backdrop = loadImage('images/large_map_all_grass.png')
     small_map = loadImage('images/small_map_all_grass.png')
@@ -89,6 +92,7 @@ function preload(){
     gold_icon = loadImage('images/gold_pile.png');
     checked_box_icon = loadImage('images/checked_box.png');
     unchecked_box_icon = loadImage('images/unchecked_box.png');
+    print("loaded 4");
 
     turret_sheet = loadImage('images/turrets.png');
     buildings3_sheet = loadImage('images/buildings3.png');
@@ -98,10 +102,12 @@ function preload(){
     item_dropped_sound = loadSound('audio/cardboard_box.wav');
     intro_track = loadSound('audio/medieval_introduction.wav');
     select_mode_sound = loadSound('audio/select_mode.wav');
+    print("loaded 5");
 
     // for mini game
     stone_background = loadImage('images/stone.jpeg');
     turtle_sheet = loadImage('images/turtles.png');
+    print("loaded 6");
 }
 
 function setup() {
