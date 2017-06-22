@@ -64,7 +64,6 @@ function preload(){
     loading_gif.style("height", "100px");
     loading_gif.style("width", "100px");
     loading_gif.position(windowWidth/2 - 55, windowHeight/2 - 70);
-    print("loaded 1");
 
     //load sprite sheets and other images
     trees_sheet = loadImage('images/trees.png')
@@ -72,7 +71,6 @@ function preload(){
     for (var k = 0; k < 8; k++) {
         people_sheets[k] = loadImage('images/people' + (k + 1)+ '.png');
     }
-    print("loaded 2");
 
     shadow1 = loadImage('images/circle_shadow1.png');
     shadow2 = loadImage('images/circle_shadow2.png');
@@ -80,7 +78,6 @@ function preload(){
     red_button_up = loadImage('images/red_button_unclicked.png');
     red_button_down = loadImage('images/red_button_clicked.png');
     title_screen_background = loadImage('images/title_screen_background.png');
-    print("loaded 3");
 
     backdrop = loadImage('images/large_map_all_grass.png')
     small_map = loadImage('images/small_map_all_grass.png')
@@ -92,34 +89,16 @@ function preload(){
     gold_icon = loadImage('images/gold_pile.png');
     checked_box_icon = loadImage('images/checked_box.png');
     unchecked_box_icon = loadImage('images/unchecked_box.png');
-    print("loaded 4");
 
     turret_sheet = loadImage('images/turrets.png');
     buildings3_sheet = loadImage('images/buildings3.png');
 
-    icon_clicked_sound  = loadSound('audio/icon_clicked.mp3');
-    item_pickup_sound = loadSound('audio/money_bag.wav');
-    item_dropped_sound = loadSound('audio/cardboard_box.wav');
-    intro_track = loadSound('audio/medieval_introduction.wav');
-    select_mode_sound = loadSound('audio/select_mode.wav');
-    print("loaded 5");
-
     // for mini game
     stone_background = loadImage('images/stone.jpeg');
     turtle_sheet = loadImage('images/turtles.png');
-    print("loaded 6");
-
-    // load sounds
-    /*for(var k = 1; k < 6; k++){
-        print("loading 7." + k);
-        background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
-        print("loaded 7." + k);
-    }*/
-    setup();
 }
 
 function setup() {
-    print("setting up...");
     canvas = createCanvas(800, 600);
     x = -1950;
     y = -2650;
@@ -152,8 +131,16 @@ function setup() {
         }
     }*/
 
-    //current_track = background_audio[Math.floor(random(0, 5))];
-    print("all set up");
+    // load sounds
+    for(var k = 1; k < 6; k++){
+        background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
+    }
+    current_track = background_audio[Math.floor(random(0, 5))];
+    icon_clicked_sound  = loadSound('audio/icon_clicked.mp3');
+    item_pickup_sound = loadSound('audio/money_bag.wav');
+    item_dropped_sound = loadSound('audio/cardboard_box.wav');
+    intro_track = loadSound('audio/medieval_introduction.wav');
+    select_mode_sound = loadSound('audio/select_mode.wav');
 }
 
 var player_drawn = false;
@@ -165,7 +152,7 @@ var exploration_mode = true;
 var choosing_mode = true;
 var button_clicked_lag = 0;
 
-var music_sound = true;
+var music_sound = false;
 var sound_sound = true;
 
 function draw(){
