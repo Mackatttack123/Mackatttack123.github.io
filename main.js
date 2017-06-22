@@ -93,6 +93,12 @@ function preload(){
     turret_sheet = loadImage('images/turrets.png');
     buildings3_sheet = loadImage('images/buildings3.png');
 
+    // load sounds
+    for(var k = 1; k < 6; k++){
+        background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
+    }
+    current_track = background_audio[Math.floor(random(0, 5))];
+
     icon_clicked_sound  = loadSound('audio/icon_clicked.mp3');
     item_pickup_sound = loadSound('audio/money_bag.wav');
     item_dropped_sound = loadSound('audio/cardboard_box.wav');
@@ -136,12 +142,6 @@ function setup() {
             solid_objects.splice(k, 1);
         }
     }*/
-
-    // load sounds
-    for(var k = 1; k < 6; k++){
-        background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
-    }
-    current_track = background_audio[Math.floor(random(0, 5))];
 }
 
 var player_drawn = false;
