@@ -148,6 +148,7 @@ function setup() {
         background_audio.push(loadSound('audio/Medieval_Music' + k + '.mp3'));
     }
     current_track = background_audio[Math.floor(random(0, 5))];
+    print("loaded 7");
 }
 
 var player_drawn = false;
