@@ -211,7 +211,7 @@ function draw(){
 }
 
 function writeUserData() {
-    if(username != null){
+    if(password != null){
         firebase.database().ref('users/' + username).set({
           gold: num_coins,
           xpos: x,
