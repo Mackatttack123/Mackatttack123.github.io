@@ -73,7 +73,7 @@ function run_mini_game(){
     textSize(20);
     strokeWeight(3);
     image(gold_icon, 0, height - 50, 80, 50, 0, 0, 250, 182);
-    text(num_coins, 27, height - 15);
+    text(num_coins, 10, height - 15);
 }
 
 function reset_mini_game(){

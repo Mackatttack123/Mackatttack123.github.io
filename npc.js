@@ -19,7 +19,7 @@ function npc(x, y, character_select){
 
 	this.moveable = true;
 
-	if(character_select >= 0){
+	if(this.character_select >= 0){
 		// select correct character skin from sprite sheet if postive 
 		this.sprite_sheet = people_sheets[Math.floor(this.character_select / 8)];
 
@@ -37,9 +37,9 @@ function npc(x, y, character_select){
 		this.i_moved = this.i + 32;
 		this.j_moved = this.j;
 	}// select correct item from sprite sheet if negative 
-	else if(character_select < 0 && character_select > -430){
+	else if(this.character_select < 0 && this.character_select > -430){
 		//(429 possible items fomr this sheet...23x19)-8) ------> sprite size 34.08 wide by 34.1 tall
-		var item_select = (-character_select) - 1
+		var item_select = (-this.character_select) - 1
 		this.sprite_sheet = items_sheet;
 		this.i = (34.08 * (item_select % 23));
 		this.j = (34.1 * (Math.floor(item_select / 19)));
@@ -48,10 +48,10 @@ function npc(x, y, character_select){
 	}
 	
 	this.show = function(x1, y1) {
-		if(character_select >= 0){
+		if(this.character_select >= 0){
 			this.depth = this.y + 20; 
 			image(this.sprite_sheet, x1 + this.x, y1 + this.y, 32, 48, this.i_moved, this.j_moved, 32, 48);
-		}else if(character_select < 0 && character_select > -430){
+		}else if(this.character_select < 0 && this.character_select > -430){
 			this.depth = this.y;
 			// item animation
 			if(frameCount % this.animation_time <= 15){
@@ -69,7 +69,7 @@ function npc(x, y, character_select){
 	// for character movements ----> down = 0; up = 3; left = 1; right = 2; still = anything else
 	this.direction = function(d){
 		var character_speed = 2.3;
-		if(frameCount % 2 == 0 && character_select >= 0){
+		if(frameCount % 2 == 0 && this.character_select >= 0){
 			this.j_moved = this.j + (48 * d);
 			this.i_moved - 32;
 			if(frameCount % 4 == 0){
@@ -97,7 +97,7 @@ function npc(x, y, character_select){
 
 	// for standstills
 	this.still = function(){
-		if(character_select >= 0){
+		if(this.character_select >= 0){
 			this.i_moved = this.i + 32;
 			this.j_moved = this.j;
 		}
@@ -111,7 +111,7 @@ function npc(x, y, character_select){
 	}
 
 	this.item_click = function(x1, y1){
-		if(character_select < 0){
+		if(this.character_select < 0){
 			if(mouseX > x1 + this.x && mouseX < x1 + this.x + 20 && mouseY > y1 + this.y && mouseY < y1 + this.y + 20){
 				return true;
 			}
