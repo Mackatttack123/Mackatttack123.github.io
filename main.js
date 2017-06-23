@@ -378,7 +378,7 @@ function run_eploration_mode(){
             }
             var npc_character_select;
             try{
-                npc_character_select = all_things[k].character_select
+                npc_character_select = npc_list[k].character_select
             }catch(TypeError){
                 npc_character_select = 0;
                 print("caught character_select");
