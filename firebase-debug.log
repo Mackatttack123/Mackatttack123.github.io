@@ -1,0 +1,28 @@
+[debug] [2017-06-22T21:09:15.059Z] ----------------------------------------------------------------------
+[debug] [2017-06-22T21:09:15.062Z] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2017-06-22T21:09:15.062Z] CLI Version:  3.9.1
+[debug] [2017-06-22T21:09:15.062Z] Platform:     darwin
+[debug] [2017-06-22T21:09:15.062Z] Node Version: v6.9.1
+[debug] [2017-06-22T21:09:15.063Z] Time:         Thu Jun 22 2017 16:09:15 GMT-0500 (CDT)
+[debug] [2017-06-22T21:09:15.063Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-06-22T21:09:15.075Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-06-22T21:09:15.075Z] > authorizing via signed-in user
+[debug] [2017-06-22T21:09:15.077Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/kingdoms-edge  
+ Thu Jun 22 2017 16:09:15 GMT-0500 (CDT)
+[debug] [2017-06-22T21:09:15.538Z] <<< HTTP RESPONSE 200
+[debug] [2017-06-22T21:09:15.539Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/kingdoms-edge/tokens  
+ Thu Jun 22 2017 16:09:15 GMT-0500 (CDT)
+[debug] [2017-06-22T21:09:15.862Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/mackfitzpatrick/Desktop/P5.JS_work/project_x'...
+[info] 
+[debug] [2017-06-22T21:09:15.865Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/kingdoms-edge  
+ Thu Jun 22 2017 16:09:15 GMT-0500 (CDT)
+[debug] [2017-06-22T21:09:16.190Z] <<< HTTP RESPONSE 200
+[debug] [2017-06-22T21:09:16.191Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/703202834896/clients/_:getWebAppConfig  
+ Thu Jun 22 2017 16:09:16 GMT-0500 (CDT)
+[debug] [2017-06-22T21:09:16.658Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
+
