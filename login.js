@@ -1,5 +1,6 @@
 var logged_in = false;
-var username = null;
+var username = "Nemo";
+var password = null;
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   welcome_prompt();
@@ -29,7 +30,7 @@ function check_password(password_entered, username_entered){
       welcome_prompt();
     }else{
     var realpass;
-    database.ref('/users/mooseman55').once('value').then(function(snapshot) {
+    database.ref('/users/' + username_entered).once('value').then(function(snapshot) {
       realpass = snapshot.val().password;
       if(realpass === password_entered){
         num_coins = snapshot.val().gold;
@@ -37,6 +38,7 @@ function check_password(password_entered, username_entered){
         y = snapshot.val().ypos;
         logged_in = true;
         username = username_entered;
+        password = snapshot.val().password;
         alertify.success("Welcome " + username_entered + "!");
       }else{
         alertify.error("Wrong password! Try Again...");
@@ -47,7 +49,7 @@ function check_password(password_entered, username_entered){
 }
 
 function welcome_prompt(){
-  alertify.prompt("<h1 style='font-size: 30px'>Welcome to Kingdom's Edge!</h1><div>Sign in below with your username or <a href='javascript:alertify.error(\"Sign up page currently not avaliable...\");'>Sign up</a>!</div><p style='font-size: 10px'>(If you'd like to play without signing in simply press cancel.)</p><b style='font-size: 20px'>Username:</b>", function(evt, value) { check_username(value); }, 'username');
+  alertify.prompt("<h1 style='font-size: 30px'>Welcome to Kingdom's Edge!</h1><div>Sign in below with your username or <a href='signup.html'>Sign up</a>!</div><p style='font-size: 10px'>(If you'd like to play without signing in simply press cancel.)</p><b style='font-size: 20px'>Username:</b>", function(evt, value) { check_username(value); }, 'username');
 }
 
 

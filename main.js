@@ -34,7 +34,7 @@ var checked_box_icon, unchecked_box_icon;
 var range = 0;
 
 var items = [];
-var num_coins = 100;
+var num_coins;
 var inventory_spots = 0;
 
 var items_sheet, trees_sheet, babies_sheet, shadow1, shadow2, turtle_sheet;
@@ -111,8 +111,6 @@ function preload(){
 
 function setup() {
     canvas = createCanvas(800, 600);
-    x = -1950;
-    y = -2650;
 
     player_direction = 0;
     i = 0;
@@ -159,50 +157,67 @@ function draw(){
     if(frameCount < 150){
         loading_screen();
     }else{
-        loading_gif.style("visibility", "hidden");
-        clear();
-        background(0);
-        if(choosing_mode || button_clicked_lag > 0){
-            textFont("apple chancery");
-            mode_choosing_screen();
+        if(logged_in){
+            loading_gif.style("visibility", "hidden");
+            clear();
+            background(0);
+            if(choosing_mode || button_clicked_lag > 0){
+                textFont("apple chancery");
+                mode_choosing_screen();
+            }else{
+                //textFont("Georgia");
+                intro_track.stop();
+                if(exploration_mode){
+                    run_eploration_mode();
+                }
+                else{
+                    run_creative_mode();
+                }
+            } 
+            // for settings icon
+            if(settings_shown){
+                stroke(0);
+                strokeWeight(3);
+                fill(175, 175, 175, 200);
+                rect(width - 200, height - 280, 190, 270);
+                fill(0, 0, 0, 250);
+                rect(width - 200, height - 60, 190, 50);
+                noStroke();
+                textSize(26);
+                fill(255);
+                text("Options", width - 170, height - 30);
+                if(sound_sound){
+                    image(checked_box_icon, width - 170, height - 260, 20, 20, 0, 0, 300, 300);
+                }else{
+                    image(unchecked_box_icon, width - 170, height - 260, 20, 20, 0, 0, 300, 300);
+                }
+                fill(0);
+                textSize(20);
+                text("Sound", width - 140, height - 243);
+                if(music_sound){
+                    image(checked_box_icon, width - 170, height - 230, 20, 20, 0, 0, 300, 300);
+                }else{
+                    image(unchecked_box_icon, width - 170, height - 230, 20, 20, 0, 0, 300, 300);
+                }
+                text("Music", width - 140, height - 213);
+            }
+            image(settings_icon, width - 50, height - 50, 35, 35, 0, 0, 1024, 915); 
+            writeUserData();
         }else{
-            //textFont("Georgia");
-            intro_track.stop();
-            if(exploration_mode){
-                run_eploration_mode();
-            }
-            else{
-                run_creative_mode();
-            }
-        } 
-        // for settings icon
-        if(settings_shown){
-            stroke(0);
-            strokeWeight(3);
-            fill(175, 175, 175, 200);
-            rect(width - 200, height - 280, 190, 270);
-            fill(0, 0, 0, 250);
-            rect(width - 200, height - 60, 190, 50);
-            noStroke();
-            textSize(26);
-            fill(255);
-            text("Options", width - 170, height - 30);
-            if(sound_sound){
-                image(checked_box_icon, width - 170, height - 260, 20, 20, 0, 0, 300, 300);
-            }else{
-                image(unchecked_box_icon, width - 170, height - 260, 20, 20, 0, 0, 300, 300);
-            }
-            fill(0);
-            textSize(20);
-            text("Sound", width - 140, height - 243);
-            if(music_sound){
-                image(checked_box_icon, width - 170, height - 230, 20, 20, 0, 0, 300, 300);
-            }else{
-                image(unchecked_box_icon, width - 170, height - 230, 20, 20, 0, 0, 300, 300);
-            }
-            text("Music", width - 140, height - 213);
+            background(0);
         }
-        image(settings_icon, width - 50, height - 50, 35, 35, 0, 0, 1024, 915); 
+        
+    }
+}
+
+function writeUserData() {
+    if(username != null){
+        firebase.database().ref('users/' + username).set({
+          gold: num_coins,
+          xpos: x,
+          ypos: y,
+          password: password
+        });
     }
 }
 
@@ -309,9 +324,13 @@ function run_eploration_mode(){
             for (var k = 0; k < 500; k++) {
                 npc_list.push(new npc(random_num_seed() * map_height_and_width, random_num_seed() * map_height_and_width, k%63)); 
             }
+            // purge some of the seed numbers 
+            for(var k = 0; k < 1000; k++){
+                var num = random_num_seed();
+            }
             // create item npcs
             for (var k = -500; k < 0; k++) {
-                npc_list.push(new npc(random_num_seed() * map_height_and_width, random_num_seed() * map_height_and_width, k%300)); 
+                npc_list.push(new npc(random(0, map_height_and_width), random(0, map_height_and_width), -Math.floor(random(0, 300)))); 
             }
             // turrets
             for (var k = 0; k < 5; k++) {
@@ -375,6 +394,18 @@ function run_eploration_mode(){
                 range = -100;
             }
 
+        }
+
+        // to make items apear and disapear
+        if(frameCount % 5 == 0){
+            var num = Math.floor(random(10, npc_list.length - 1));
+            if(npc_list[num].character_select < 0){
+                npc_list.splice(num, 1);
+                // make sure there is always 300 item
+                for (var k = npc_list.length - 1; k < 800; k++) {
+                    npc_list.push(new npc(random(0, map_height_and_width), random(0, map_height_and_width), Math.floor(random(-300, -10))));
+                }
+            }
         }
 
         // for mini game
@@ -496,6 +527,12 @@ function display_all(){
             }
         }
     } 
+    strokeWeight(2);
+    textSize(10);
+    fill(255);
+    textFont("helvetica");
+    text(username, width/2-(username.length*3), height/2 - 30);
+    textFont("apple chancery");
 }
 
 function sort_array(array){

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Online RPG</title>
+    <meta charset="UTF-8">
+    <script src="alertify.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <link href="alertify.core.css" rel="stylesheet">
+    <link href="alertify.default.css" rel="stylesheet">
+    <!--Google analytics here-->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-101481877-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+	<!--Firebase-->
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase-messaging.js"></script>
+    <script type="text/javascript">
+    // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCdT6VMV9qeDPfFD2LInK1VKSRAMxPhJKk",
+        authDomain: "kingdoms-edge.firebaseapp.com",
+        databaseURL: "https://kingdoms-edge.firebaseio.com",
+        projectId: "kingdoms-edge",
+        storageBucket: "",
+        messagingSenderId: "703202834896"
+      };
+      firebase.initializeApp(config);
+
+      // Get a reference to the database service
+      var database = firebase.database();
+    	document.addEventListener("DOMContentLoaded", function(event) { 
+		  sign_up_prompt();
+		});
+
+		function sign_up_prompt(){
+		  alertify.prompt("<h1 style='font-size: 30px'>Sign Up</h1><div>In order to set up you Kingdom's edge account we just need a few things from you.</div><p>First pick a username:</p>", function(evt, value) { check_username(value); }, 'no_name_77');
+		}
+
+		function check_username(username_entered){
+		  if(username_entered == null){
+		   window.location.href = "index.html";
+		  }else{
+		    database.ref("/users/" + username_entered).once('value', function(snapshot) {
+		      if((snapshot.val() === null)){
+		      	alertify.prompt("<h1 style='font-size: 30px'>Sign Up</h1><p>Now pick a password:</p>", function(evt, value) { set_password(value, username_entered); }, 'password');
+		      }else{
+		        alertify.error("Username aready take! Try again...");
+		        sign_up_prompt();
+		      }
+		    });
+		  }
+		}
+
+		function set_password(password_entered, username_entered){
+			if(password_entered == null){
+				check_username(username_entered);
+			}else{
+				writeUserData(password_entered, username_entered);
+				alertify.alert('<h1><b>Account Created!</b></h1>You can now go back to the main page and sign in! Just press ok.', function(){ alertify.success('Account created!'); window.location.href = "index.html";});
+			}
+		}
+
+		function writeUserData(password_entered, username_entered) {
+	        firebase.database().ref('users/' + username_entered).set({
+	          gold: 100,
+	          xpos: -1878,
+	          ypos: -2634,
+	          password: password_entered
+	        });
+		}
+
+    </script>
+
+  <style> body {padding: 0; margin: 0;} </style>
+  </head>
+  <body style="background-image: url('images/wood_background.jpg'); color: black">
+    <center>
+      <div id="banner-holder">
+        <img src="images/sword.png" alt="Sword" style="width:800px;height:150px;">
+      </div>
+      <!-- stuff goes here-->
+
+     <div style="background-color: rgba(0, 0, 0, .9); width: 50%; color: white"><p><a href="index.html">Game</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="about.html">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="updates.html">Updates</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="contact.html">Contact</a></p></div>
+      <br><i style="color: white">Created by Mack FitzPatrick (2017)</i></br>
+    </center>
+  </body>
+</html>
