@@ -376,8 +376,15 @@ function run_eploration_mode(){
             if(npc_list[k].x < 0 || npc_list[k].x > 4950 || npc_list[k].y < 0 || npc_list[k].y > 4950){
                 npc_list.splice(k, 1);
             }
+            var npc_character_select;
+            try{
+                npc_character_select = all_things[k].character_select
+            }catch(TypeError){
+                npc_character_select = 0;
+                print("caught character_select");
+            }
             //check if player walked over item so they can be picked up
-            if(inventory_spots < 81 && npc_list[k].character_select < 0 && npc_list[k].x + x > width/2 - 25 && npc_list[k].x + x < width/2 + 10 && npc_list[k].y + y > height/2 - 15 && npc_list[k].y + y < height/2 + 15){
+            if(inventory_spots < 81 && npc_character_select < 0 && npc_list[k].x + x > width/2 - 25 && npc_list[k].x + x < width/2 + 10 && npc_list[k].y + y > height/2 - 15 && npc_list[k].y + y < height/2 + 15){
                 items.push(npc_list[k].character_select);
                 npc_list.splice(k, 1);
                 items.sort(function(a, b) {
@@ -514,7 +521,7 @@ function display_all(){
             npc_depth = all_things[k].depth
         }catch(TypeError){
             npc_depth = height/2;
-            print("caught");
+            print("caught npc_depth");
         }
         // for player depth corrections
         if(player_drawn == false){
