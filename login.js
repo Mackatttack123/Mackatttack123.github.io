@@ -16,7 +16,11 @@ function check_username(username_entered){
   }else{
     database.ref("/users/" + username_entered).once('value', function(snapshot) {
       if((snapshot.val() !== null)){
-        alertify.prompt("<b style='font-size: 20px'>Password:</b>", function(evt, value) { check_password(value, username_entered); }, 'password');
+        alertify.set({ labels: {
+        ok     : "Sign In",
+        cancel : "Cancel"
+        } });
+        alertify.prompt("<b style='font-size: 20px'>Password:</b>", function(evt, value) { check_password(value, username_entered); }, "password");
       }else{
         alertify.error("Username doesn't exist! Try again...");
         welcome_prompt();
@@ -49,7 +53,13 @@ function check_password(password_entered, username_entered){
 }
 
 function welcome_prompt(){
-  alertify.prompt("<h1 style='font-size: 30px'>Welcome to Kingdom's Edge!</h1><div>Sign in below with your username or <a href='signup.html'>Sign up</a>!</div><p style='font-size: 10px'>(If you'd like to play without signing in simply press cancel.)</p><b style='font-size: 20px'>Username:</b>", function(evt, value) { check_username(value); }, 'username');
+  alertify.set({ labels: {
+        ok     : "Submit",
+        cancel : "Play without signing in"
+    } });
+  alertify.prompt("<h1 style='font-size: 30px'>Welcome to Kingdom's Edge!</h1>"
+    + "<div>Sign in below with your username or <a href='signup.html'>Sign up</a> for a free account!</div>"
+    + "<p></p><b style='font-size: 20px'>Username:</b>", function(evt, value) { check_username(value); }, 'username');
 }
 
 

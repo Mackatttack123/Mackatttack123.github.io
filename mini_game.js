@@ -12,6 +12,8 @@ var payed = false;
 function run_mini_game(){
 	clear();
 	background(0);
+	// check to see if background music should be played
+    music_handler();
 	image(stone_background, 0, 0, 800, 600, 0, 0, 1024, 1024);
 	ellipseMode(CENTER);
 	noFill();
@@ -20,7 +22,7 @@ function run_mini_game(){
 	ellipse(width/2, height/2, 500, 500);
 	// get the players bet
 	if(!answered){
-		alertify.prompt( 'How much gold would you like to bet?', function(evt, value) { check_bet(value); }, '1'); 
+		alertify.prompt( 'How much gold would you like to bet?', function(evt, value) { check_bet(value); }, '1');
 		answered = true;        
 	}else if(!waiting_for_bet){
 		fill(255);
@@ -46,13 +48,28 @@ function run_mini_game(){
 		}
 		if(game_over){
 			if(winner == player_turtle_num){
+				// for win
 				fill(0, 255, 0);
 				text("Congrats you won " + (player_bet * 5) + " gold!", width/2 - 120, height/2);
 				if(!payed){
+					if(sound_sound){
+	                    success_sound.volume = 1.0;
+	                    success_sound.playMode('restart');
+	                    success_sound.play();
+	                }
 					num_coins+=(player_bet*5);
 					payed = true;
 				}
 			}else{
+				// for lose
+				if(!payed){
+					if(sound_sound){
+	                    failure_sound.volume = 3.0;
+	                    failure_sound.playMode('restart');
+	                    failure_sound.play();
+	                }
+					payed = true;
+				}
 				fill(255, 0, 0);
 				text("Turtle #" + winner +  " won...you lose " + player_bet + " gold!", width/2 - 140, height/2);
 			}
@@ -110,6 +127,10 @@ function check_bet(bet){
 				alertify.success("You bet " + bet + " gold")
 				player_bet = bet; 
 				num_coins-=bet;
+				alertify.set({ labels: {
+		            ok     : "Place Bet",
+		            cancel : "Leave"
+		        } });
 				alertify.prompt('Which turtle would you like to bet on? (1-8)', function(evt, value) { check_turtle_pick(value); }, '1'); 
 			}
 		}else{
@@ -121,7 +142,7 @@ function check_bet(bet){
 
 function check_turtle_pick(turtle_num){
 	if(turtle_num == null){
-		alertify.error("The gold has alreafy been bet. Please choose a turtle.");
+		alertify.error("You can't leave...the gold has already been bet. Please choose a turtle.");
 		alertify.prompt('Which turtle would you like to bet on? (1-8)', function(evt, value) { check_turtle_pick(value); }, '1');
 	}else{
 		// make sure the bet was actually a whole number and not letters or a float

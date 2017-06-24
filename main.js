@@ -26,7 +26,7 @@ var music_checkbox, sound_checkbox;
 var background_audio = [];
 var current_track;
 var intro_track;
-var item_pickup_sound, icon_clicked_sound, item_dropped_sound, select_mode_sound;
+var item_pickup_sound, icon_clicked_sound, item_dropped_sound, select_mode_sound, success_sound, failure_sound;
 var loading_gif;
 var inventory_icon, compass_icon, heart_icon, settings_icon, gold_icon;
 var checked_box_icon, unchecked_box_icon;
@@ -103,6 +103,8 @@ function preload(){
     item_dropped_sound = loadSound('audio/cardboard_box.wav');
     intro_track = loadSound('audio/medieval_introduction.wav');
     select_mode_sound = loadSound('audio/select_mode.wav');
+    success_sound = loadSound('audio/success.wav');
+    failure_sound = loadSound('audio/failure.wav');
 
     // for mini game
     stone_background = loadImage('images/stone.jpeg');
@@ -216,7 +218,8 @@ function writeUserData() {
           gold: num_coins,
           xpos: x,
           ypos: y,
-          password: password
+          password: password,
+          Last_active: year() + "/" + month() + "/"  + day() + "/" + hour() + ":" + minute() + "." + second()
         });
     }
 }
@@ -452,7 +455,14 @@ function run_eploration_mode(){
             if(num_coins > 0){
                 text("Press 'e' to enter the turtle racing house...", width/2 - 170, height - 30);
                 if(keyIsDown(69)){
+                    alertify.set({ labels: {
+                        ok     : "Let's Race!",
+                    } });
                     alertify.alert("Welcome to the Turtle House! Here you can bet on turtle races and win more gold! Just be carful not to get addicted...Good Luck!", function(){ alertify.success("Let's race!"); });
+                    alertify.set({ labels: {
+                        ok     : "Place Bet",
+                        cancel : "Leave"
+                    } });
                     mini_game_playing = true;
                 }
             }else{
