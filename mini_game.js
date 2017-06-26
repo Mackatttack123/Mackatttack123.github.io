@@ -1,3 +1,20 @@
+/*
+1. A snailrace would work similar to the turtle race, you could make it work in one direction like a running track 
+(side view of a table for example).
+
+2. The pigfarm-minigame: Place limited food-items in a labyrinth of gates/fences to guide a pig to the exit.
+
+3.A tower defense concept: Maybe ants invading a picnic. Your weapons are cookie crumbs catapults, honey spray guns,
+melon seed canons, etc.
+
+4. Ballerburg is an old but nice Atari 512ST gameconcept. You could use 2 ant colonies with anthills as castles.
+
+5. I could think of several "tavern" games. e.G. (1) A balancing minigame: drop coins on top of each other until 
+the coin-tower falls over. Or (2) aim/throw coins in beer mugs. Or (3) build a house of cards (coasters). 
+Just simple physics games.
+*/
+
+
 // All for turtle mini game
 var setup_turtles = true;
 var answered = false;

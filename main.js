@@ -140,7 +140,7 @@ function setup() {
         if(solid_objects[k].x > 1600 && solid_objects[k].x < 3400 && solid_objects[k].y > 1600 && solid_objects[k].y < 3400 && solid_objects[k].object_select == 1){
             solid_objects.splice(k, 1);
         }
-    }*/
+    }*/   
 }
 
 var player_drawn = false;
@@ -155,11 +155,27 @@ var button_clicked_lag = 0;
 var music_sound = true;
 var sound_sound = true;
 
+var items_setup = false;
+
 function draw(){
     if(frameCount < 150){
         loading_screen();
     }else{
         if(logged_in){
+            if(!items_setup){
+                // import items for last session
+                if(password != null){
+                    database.ref('/users/' + username + "/items").once('value').then(function(snapshot) {
+                      snapshot.forEach(function(childSnapshot) {
+                         items = items.concat(childSnapshot.val().item_num);
+                         print(childSnapshot.val().item_num);
+                      });
+                    });
+                    print(items);
+                    print("test2");
+                }
+            }
+            items_setup = true;
             loading_gif.style("visibility", "hidden");
             clear();
             background(0);
@@ -171,6 +187,7 @@ function draw(){
                 intro_track.stop();
                 if(exploration_mode){
                     run_eploration_mode();
+                    writeUserData();
                 }
                 else{
                     run_creative_mode();
@@ -204,7 +221,6 @@ function draw(){
                 text("Music", width - 140, height - 213);
             }
             image(settings_icon, width - 50, height - 50, 35, 35, 0, 0, 1024, 915); 
-            writeUserData();
         }else{
             background(0);
         }
@@ -221,6 +237,11 @@ function writeUserData() {
           password: password,
           Last_active: year() + "/" + month() + "/"  + day() + "/" + hour() + ":" + minute() + "." + second()
         });
+        for (var k = items.length - 1; k >= 0; k--) {
+            firebase.database().ref('users/' + username + "/items").push({
+                item_num: items[k]
+            });
+        }  
     }
 }
 
@@ -347,6 +368,7 @@ function run_eploration_mode(){
             for (var k = -2000; k < 0; k++) {
                 solid_objects.push(new solid_object(random_num_seed() * 4800, random_num_seed() * 4800, 1, Math.floor(random_num_seed()*10%6))); 
             }
+
             setup_exploration_mode = false;
         }
 
