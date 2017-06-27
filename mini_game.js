@@ -12,6 +12,10 @@ melon seed canons, etc.
 5. I could think of several "tavern" games. e.G. (1) A balancing minigame: drop coins on top of each other until 
 the coin-tower falls over. Or (2) aim/throw coins in beer mugs. Or (3) build a house of cards (coasters). 
 Just simple physics games.
+
+6. Have a character follow your mouse as you try to avoid arrows flying around for as long as possible
+
+7. Target pratice with arrows?
 */
 
 

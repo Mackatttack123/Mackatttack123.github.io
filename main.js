@@ -30,6 +30,7 @@ var item_pickup_sound, icon_clicked_sound, item_dropped_sound, select_mode_sound
 var loading_gif;
 var inventory_icon, compass_icon, heart_icon, settings_icon, gold_icon;
 var checked_box_icon, unchecked_box_icon;
+var random_details_sheet;
 
 var range = 0;
 
@@ -47,7 +48,8 @@ var all_things = [];
 
 var map_height_and_width = 5000;
 
-var red_button_up, red_button_down, title_screen_background, stone_background;
+var red_button_up, red_button_down, title_screen_background, stone_background, general_store_background;
+var store_manager;
 
 var mini_game_playing = false;
 
@@ -63,7 +65,7 @@ function preload(){
     loading_gif = createImg('images/loading_cube.gif');
     loading_gif.style("height", "100px");
     loading_gif.style("width", "100px");
-    loading_gif.position(windowWidth/2 - 55, windowHeight/2 - 70);
+    loading_gif.position(windowWidth/2 - 55, windowHeight/2 - 120);
 
     //load sprite sheets and other images
     trees_sheet = loadImage('images/trees.png')
@@ -89,6 +91,7 @@ function preload(){
     gold_icon = loadImage('images/gold_pile.png');
     checked_box_icon = loadImage('images/checked_box.png');
     unchecked_box_icon = loadImage('images/unchecked_box.png');
+    random_details_sheet = loadImage('images/random_details.png');
 
     turret_sheet = loadImage('images/turrets.png');
     buildings3_sheet = loadImage('images/buildings3.png');
@@ -109,6 +112,10 @@ function preload(){
     // for mini game
     stone_background = loadImage('images/stone.jpeg');
     turtle_sheet = loadImage('images/turtles.png');
+
+    // for general store
+    general_store_background = loadImage('images/general_store_background.jpg');
+    store_manager = loadImage('images/store_manager.png');
 }
 
 function setup() {
@@ -168,11 +175,8 @@ function draw(){
                     database.ref('/users/' + username + "/items").once('value').then(function(snapshot) {
                       snapshot.forEach(function(childSnapshot) {
                          items = items.concat(childSnapshot.val().item_num);
-                         print(childSnapshot.val().item_num);
                       });
                     });
-                    print(items);
-                    print("test2");
                 }
             }
             items_setup = true;
@@ -279,7 +283,7 @@ function mode_choosing_screen(){
     text("Exploration Mode", width/2 - 101, height/2 + 23);
     text("Creative Mode", width/2 - 85, height/2 + 146);
     textSize(15);
-    text("            (Beta v1.09)", width/2 - 95, height/2 + 41);
+    text("            (Beta v2.02)", width/2 - 95, height/2 + 41);
     text("         (Coming Soon)", width/2 - 85, height/2 + 166);
     fill(255);
     textSize(80);
@@ -342,7 +346,7 @@ function run_creative_mode(){
 var setup_exploration_mode = true;
 function run_eploration_mode(){
 
-    if(!mini_game_playing){
+    if(!mini_game_playing && !running_general_store){
         if(setup_exploration_mode){
             // create people npcs
             for (var k = 0; k < 500; k++) {
@@ -440,12 +444,15 @@ function run_eploration_mode(){
             }
         }
 
-        // for mini game
+        // for turtle racing game building icon
         fill(255);
         stroke(3);
         textSize(12);
-        text("Turtle racing here!", x + 2405, y + 2190 + height);
+        text(" Turtle Races", x + 2415, y + 2190 + height);
         image(turtle_sheet, x + 2420, y + 2180 + height, 48, 48, 40, 0, 48, 48);
+
+        // for general store building 
+        text("General\n  Store", x + 2248, y + 2300 + height - 160);
 
         // all player movement and collision is controled in here
         player_movement();
@@ -469,7 +476,7 @@ function run_eploration_mode(){
             }
         }
 
-        // for mini game entrace
+        // for turtle racing mini-game entrace
         if(in_box(x + 2300 + 120, y + 2300 + height - 90, 30, 55, width/2, height/2)){
             fill(255);
             stroke(3);
@@ -491,8 +498,22 @@ function run_eploration_mode(){
                 text("Get some gold and them come back to play...", width/2 - 165, height - 30);
             }
         }
-    }else{
+
+        // for general store entrace
+        if(in_box(x + 2240, y + 2300 + height - 150, 30, 55, width/2, height/2)){
+            fill(255);
+            stroke(3);
+            textSize(20);
+            text("Press 'e' to enter the general store...", width/2 - 170, height - 30);
+            if(keyIsDown(69)){
+                running_general_store = true;
+            }
+        }
+
+    }else if(mini_game_playing){
         run_mini_game();
+    }else if(running_general_store){
+        run_general_store();
     }
         
 }

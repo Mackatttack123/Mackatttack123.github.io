@@ -13,6 +13,108 @@ function mouse_clicked(hotkey = -69){
 			music_sound = !music_sound;
 		}
 	}
+
+	// for general store item selling slicks
+	if(running_general_store){
+		// see if an item inside the inventory screen was clicked
+	    if(in_box(width - 650, height - 220, 540, 180)){
+	        for (var k = 0; k < items.length; k++) {
+	            if(in_box(width - 650 + ((k % 18)* 30), height - 220 + (Math.floor(k/18)* 35), 30, 30)){
+	                alertify.error("Item sold for 2 gold...");
+	                // for sound effect of getting item
+	                if(sound_sound){
+	                    item_pickup_sound.volume = 0.5;
+	                    item_pickup_sound.playMode('restart');
+	                    item_pickup_sound.play();
+	                }
+	                items_sold.push(items[k]);
+	                items.splice(k, 1);
+	                num_coins+=2;
+	            }
+	        }
+	    // for exit button
+	    }
+	    if(in_box(width - 170, 20, 150, 50)){
+	    	// exit back to main game here
+	    	running_general_store = false;
+	    	y-=10;
+	    	items_sold = [];
+	    	if(sound_sound){
+				select_mode_sound.play();
+			}
+
+	    }
+	    // for sell all button
+	    if(in_box(width/2 + 300, height/2 + 100, 75, 25) && !settings_shown){
+	    	if(items.length > 0){
+	    		var total = 0;
+		    	items_sold = items_sold.concat(items);
+		    	for (var k = items.length - 1; k >= 0; k--) {
+		    		num_coins += 2;
+		    		total += 2;
+		    	}
+		    	alertify.error("All items sold for " + total + " gold...");
+	            // for sound effect of getting item
+	            if(sound_sound){
+	                item_pickup_sound.volume = 0.5;
+	                item_pickup_sound.playMode('restart');
+	                item_pickup_sound.play();
+	            }
+		    	items = [];
+	    	}else{
+	    		alertify.error("You don't have anything to sell...");
+	    		if(sound_sound){
+	                failure_sound.volume = 0.5;
+	                failure_sound.playMode('restart');
+	                failure_sound.play();
+	            }
+	    	}
+	    }
+	    // for undo one button
+	    if(in_box(width/2 + 300, height/2 + 135, 75, 25) && !settings_shown){
+	    	if(items_sold.length > 0){
+	    		items.push(items_sold.pop());
+	    		num_coins -= 2;
+	    		alertify.success("Item added back!");
+	    		if(sound_sound){
+	                item_dropped_sound.volume = 0.5;
+	                item_dropped_sound.playMode('restart');
+	                item_dropped_sound.play();
+	            }
+	    	}else{
+	    		alertify.error("Nothing to undo...");
+	    		if(sound_sound){
+	                failure_sound.volume = 0.5;
+	                failure_sound.playMode('restart');
+	                failure_sound.play();
+	            }
+	    	}
+	    }
+	    // for undo all button
+	    if(in_box(width/2 + 300, height/2 + 170, 75, 25) && !settings_shown){
+	    	if(items_sold.length > 0){
+	    		for (var k = items_sold.length - 1; k >= 0; k--) {
+		    		items.push(items_sold[k]);
+		    	}
+		    	num_coins -= items_sold.length*2;
+		    	alertify.success(items_sold.length + " items added back!");
+		    	items_sold = [];
+	    		if(sound_sound){
+	                item_dropped_sound.volume = 0.5;
+	                item_dropped_sound.playMode('restart');
+	                item_dropped_sound.play();
+	            }
+	    	}else{
+	    		alertify.error("Nothing to undo...");
+	    		if(sound_sound){
+	                failure_sound.volume = 0.5;
+	                failure_sound.playMode('restart');
+	                failure_sound.play();
+	            }
+	    	}
+	    }
+	}
+
 	// for end of turtle mini_game so you can play agin or leave
 	if(mini_game_playing && game_over){
 		if(in_box(width/2 - 75, height/2 + 50, 150, 50)){
@@ -36,7 +138,7 @@ function mouse_clicked(hotkey = -69){
 			mini_game_playing = false;
 		}
 	}
-	if(choosing_mode && !mini_game_playing){
+	if(choosing_mode && !mini_game_playing && !running_general_store){
 		if(in_box(width/2 - 150, height/2 + 113, 300, 70)){
 			button_clicked_lag = 12;
 			if(sound_sound){
