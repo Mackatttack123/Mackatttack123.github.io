@@ -265,7 +265,7 @@ function mouse_clicked(hotkey = -69){
 		                }
 		            }
 		        }
-		    // to show yellow flash if inventory is full
+		    // to show red flash if inventory is full
 		    }else if(inventory_spots == 81){
 		        range = -100;
 		    }

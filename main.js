@@ -34,7 +34,7 @@ var random_details_sheet;
 
 var range = 0;
 
-var items = [];
+var items = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
 var num_coins;
 var inventory_spots = 0;
 
@@ -283,7 +283,7 @@ function mode_choosing_screen(){
     text("Exploration Mode", width/2 - 101, height/2 + 23);
     text("Creative Mode", width/2 - 85, height/2 + 146);
     textSize(15);
-    text("            (Beta v2.02)", width/2 - 95, height/2 + 41);
+    text("            (Beta v2.03)", width/2 - 95, height/2 + 41);
     text("         (Coming Soon)", width/2 - 85, height/2 + 166);
     fill(255);
     textSize(80);
@@ -399,7 +399,8 @@ function run_eploration_mode(){
         // all the depth perception work for npcs / player / and objects 
         display_all();
 
-        
+        inventory_spots = items.length;
+
         for (var k = npc_list.length - 1; k >= 0; k--) {
             // remove an npc if thay walk out of bounds / off the map
             if(npc_list[k].x < 0 || npc_list[k].x > 4950 || npc_list[k].y < 0 || npc_list[k].y > 4950){
@@ -426,7 +427,7 @@ function run_eploration_mode(){
                     item_pickup_sound.play();
                 }
                 alertify.success("Item added to inventory");
-            }else if(inventory_spots == 81){
+            }else if(range >= 0 && npc_character_select < 0 && npc_list[k].x + x > width/2 - 25 && npc_list[k].x + x < width/2 + 10 && npc_list[k].y + y > height/2 - 15 && npc_list[k].y + y < height/2 + 15 && inventory_spots == 81){
                 range = -100;
             }
 
