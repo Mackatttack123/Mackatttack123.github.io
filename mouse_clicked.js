@@ -115,15 +115,15 @@ function mouse_clicked(hotkey = -69){
 	    }
 	}
 
-	// for end of turtle mini_game so you can play agin or leave
-	if(mini_game_playing && game_over){
+	// for end of turtle mini_game so you can play again or leave
+	if(turtle_mini_game_playing && game_over){
 		if(in_box(width/2 - 75, height/2 + 50, 150, 50)){
 			if(num_coins > 0){
 				if(sound_sound){
 					select_mode_sound.play();
 				}
 				// play again here
-				reset_mini_game();
+				reset_turtle_mini_game();
 			}else{
 				alertify.error("Sorry, you don't have any gold left to bet...");
 			}
@@ -134,11 +134,49 @@ function mouse_clicked(hotkey = -69){
 			}
 			// exit back to main game here
 			y-=10;
-			reset_mini_game();
-			mini_game_playing = false;
+			reset_turtle_mini_game();
+			turtle_mini_game_playing = false;
 		}
 	}
-	if(choosing_mode && !mini_game_playing && !running_general_store){
+	// for end of dragon arrow dodging mini_game so you can play again or leave
+	if(running_arrow_dodging_mini_game_intro){
+		if(in_box(width - 170, 20, 150, 50)){
+	    	// exit back to main game here
+	    	running_arrow_dodging_mini_game_intro = false;
+	    	y-=10;
+	    	items_sold = [];
+	    	if(sound_sound){
+				select_mode_sound.play();
+			}
+	    }
+	    if(in_box(80, 270, 200, 50)){
+	    	// play the game
+	    	if(sound_sound){
+				select_mode_sound.play();
+			}
+			arrow_dodging_mini_game_playing = true;
+	    }
+	}
+	if(arrow_dodging_mini_game_playing && game_over_arrow_dodging_game){
+		if(in_box(width/2 - 75, height/2 + 50, 150, 50)){
+			if(sound_sound){
+				select_mode_sound.play();
+			}
+			// play again here
+			arrow_dodging_mini_game_setup = true;
+		}else if(in_box(width/2 - 75, height/2 + 120, 150, 50)){
+            if(sound_sound){
+				select_mode_sound.play();
+			}
+			// exit back to main game here
+			y-=10;
+			arrow_dodging_mini_game_setup = true;
+			arrow_dodging_mini_game_playing = false;			
+			running_arrow_dodging_mini_game_intro = false;
+		}
+	}
+
+	if(choosing_mode && running_main){
 		if(in_box(width/2 - 150, height/2 + 113, 300, 70)){
 			button_clicked_lag = 12;
 			if(sound_sound){

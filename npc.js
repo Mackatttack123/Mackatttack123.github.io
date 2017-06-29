@@ -49,7 +49,7 @@ function npc(x, y, character_select){
 	
 	this.show = function(x1, y1) {
 		if(this.character_select >= 0){
-			this.depth = this.y + 20; 
+			this.depth = this.y + 25; 
 			image(this.sprite_sheet, x1 + this.x, y1 + this.y, 32, 48, this.i_moved, this.j_moved, 32, 48);
 		}else if(this.character_select < 0 && this.character_select > -430){
 			this.depth = this.y;
@@ -68,11 +68,11 @@ function npc(x, y, character_select){
 
 	// for character movements ----> down = 0; up = 3; left = 1; right = 2; still = anything else
 	this.direction = function(d){
-		var character_speed = 2.3;
-		if(frameCount % 2 == 0 && this.character_select >= 0){
+		var character_speed = 1.4;
+		if(frameCount % 4 == 0 && this.character_select >= 0){
 			this.j_moved = this.j + (48 * d);
 			this.i_moved - 32;
-			if(frameCount % 4 == 0){
+			if(frameCount % 8 == 0){
 	            if(this.i_moved < this.i + 64){
 	                this.i_moved += 32;
 	            }
@@ -104,7 +104,7 @@ function npc(x, y, character_select){
 	}
 
 	this.randomWalk = function(){
-		if(frameCount % 36 == 0){
+		if(frameCount % 64 == 0){
 			var num = Math.floor(Math.random() * 5);
 			this.direction(num);
 		}

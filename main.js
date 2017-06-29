@@ -1,16 +1,4 @@
-/*
-TODO:
 
-1. make it so you can enter buildings
-
-2. add mini games (turtle races with betting?)----> triggered when in a building?
-
-3. add money? trading with npcs?
-
-4. make certain mini games require money or items to play
-
-5. have items pop up randomly and then diapear after so much time
-*/
 var canvas;
 
 var backdrop, small_map;
@@ -51,7 +39,7 @@ var map_height_and_width = 5000;
 var red_button_up, red_button_down, title_screen_background, stone_background, general_store_background;
 var store_manager;
 
-var mini_game_playing = false;
+var turtle_mini_game_playing = false;
 
 // use this to seed maps so they always generate the same
 var seed = 97656;
@@ -116,6 +104,10 @@ function preload(){
     // for general store
     general_store_background = loadImage('images/general_store_background.jpg');
     store_manager = loadImage('images/store_manager.png');
+
+    // for dragon mini-game
+    dragon_master_image = loadImage('images/dragon_master.png');
+    dragon_master_house_backgound = loadImage('images/dragon_master_house_background.jpg');
 }
 
 function setup() {
@@ -140,14 +132,7 @@ function setup() {
     }
     for (var k = -250; k < 0; k++) {
         solid_objects.push(new solid_object(-k * 20, 4870 + random(0, 1), 1, Math.floor(random_num_seed()*10%6))); 
-    }
-
-    // no trees in the middle stone place
-    /*for (var k = solid_objects.length - 1; k >= 0; k--) {
-        if(solid_objects[k].x > 1600 && solid_objects[k].x < 3400 && solid_objects[k].y > 1600 && solid_objects[k].y < 3400 && solid_objects[k].object_select == 1){
-            solid_objects.splice(k, 1);
-        }
-    }*/   
+    } 
 }
 
 var player_drawn = false;
@@ -223,6 +208,12 @@ function draw(){
                     image(unchecked_box_icon, width - 170, height - 230, 20, 20, 0, 0, 300, 300);
                 }
                 text("Music", width - 140, height - 213);
+                // keeps track of frame rate
+                textSize(25);
+                if(frameCount%10 == 0){
+                    frame_rate_tracker = Math.floor(frameRate());
+                }
+                text(frame_rate_tracker+"FPS", width - 140, height - 100);
             }
             image(settings_icon, width - 50, height - 50, 35, 35, 0, 0, 1024, 915); 
         }else{
@@ -231,6 +222,8 @@ function draw(){
         
     }
 }
+
+var frame_rate_tracker = 60;
 
 function writeUserData() {
     if(password != null){
@@ -283,8 +276,8 @@ function mode_choosing_screen(){
     text("Exploration Mode", width/2 - 101, height/2 + 23);
     text("Creative Mode", width/2 - 85, height/2 + 146);
     textSize(15);
-    text("            (Beta v2.03)", width/2 - 95, height/2 + 41);
-    text("         (Coming Soon)", width/2 - 85, height/2 + 166);
+    text("            (Beta v3.01)", width/2 - 95, height/2 + 41);
+    text("        (Coming Later)", width/2 - 85, height/2 + 166);
     fill(255);
     textSize(80);
     text("Kingdom's Edge", width/2 - 285, height/2 - 150);
@@ -343,10 +336,12 @@ function run_creative_mode(){
     player_movement();
 }
 
+var running_main = true;
 var setup_exploration_mode = true;
-function run_eploration_mode(){
 
-    if(!mini_game_playing && !running_general_store){
+function run_eploration_mode(){
+    running_main = !turtle_mini_game_playing && !running_general_store && !running_arrow_dodging_mini_game_intro;
+    if(running_main){
         if(setup_exploration_mode){
             // create people npcs
             for (var k = 0; k < 500; k++) {
@@ -455,6 +450,9 @@ function run_eploration_mode(){
         // for general store building 
         text("General\n  Store", x + 2248, y + 2300 + height - 160);
 
+        // for dragon masters house
+        text("Dragon Master", x + 1625, y + 2364 + height - 150)
+
         // all player movement and collision is controled in here
         player_movement();
 
@@ -493,7 +491,7 @@ function run_eploration_mode(){
                         ok     : "Place Bet",
                         cancel : "Leave"
                     } });
-                    mini_game_playing = true;
+                    turtle_mini_game_playing = true;
                 }
             }else{
                 text("Get some gold and them come back to play...", width/2 - 165, height - 30);
@@ -511,10 +509,23 @@ function run_eploration_mode(){
             }
         }
 
-    }else if(mini_game_playing){
-        run_mini_game();
+        // for dragon arrow dodging game entrace
+        if(in_box(x + 1636, y + 2394 + height - 150, 30, 55, width/2, height/2)){
+            fill(255);
+            stroke(3);
+            textSize(20);
+            text("Press 'e' to enter the Dragon Master's house...", width/2 - 190, height - 30);
+            if(keyIsDown(69)){
+                running_arrow_dodging_mini_game_intro = true;
+            }
+        }
+
+    }else if(turtle_mini_game_playing){
+        run_turtle_mini_game();
     }else if(running_general_store){
         run_general_store();
+    }else if(running_arrow_dodging_mini_game_intro){
+        run_arrow_dodging_mini_game_intro();
     }
         
 }
@@ -559,7 +570,10 @@ function range_circle(){
 
 function display_all(){
     for (var k = all_things.length - 1; k >= 0; k--) {
-        all_things[k].show(x, y);
+        // only show if in view
+        if(in_box(-x - 200, -y - 200, width + 200, height + 200, all_things[k].x, all_things[k].y)){
+            all_things[k].show(x, y);
+        }
         if(all_things[k].moveable){
             // make people npcs walk around
             all_things[k].direction(all_things[k].set_direction);
@@ -567,8 +581,7 @@ function display_all(){
                 all_things[k].randomWalk();
             }
         }
-            
-
+             
         // set player image correctly in front or behind npcs
         var npc_depth;
         try{
@@ -602,13 +615,13 @@ function sort_array(array){
         });
 }
 
-var character_speed = 3;
+var character_speed = 1.5;
 
 function player_movement(){
     // player movement (using WASD) and collision 
     if (keyIsDown(65)){
         j = 48;
-        if(frameCount % 5 == 0){
+        if(frameCount % 7 == 0){
             if(i < 64){
                 i += 32;
             }
@@ -620,7 +633,7 @@ function player_movement(){
         player_direction = 0
     }else if (keyIsDown(68)){
         j = 96;
-        if(frameCount % 5 == 0){
+        if(frameCount % 7 == 0){
             if(i < 64){
                 i += 32;
             }
@@ -632,7 +645,7 @@ function player_movement(){
         player_direction = 1;
     }else if (keyIsDown(87)){
         j = 144;
-        if(frameCount % 5 == 0){
+        if(frameCount % 7 == 0){
             if(i < 64){
                 i += 32;
             }
@@ -644,7 +657,7 @@ function player_movement(){
         player_direction = 2;
     }else if (keyIsDown(83)){
         j = 0;
-        if(frameCount % 5 == 0){
+        if(frameCount % 7 == 0){
             if(i < 64){
                 i += 32;
             }
